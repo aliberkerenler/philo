@@ -70,7 +70,7 @@ void	ft_usleep(long long time_in_ms, t_philo *philo)
 		pthread_mutex_unlock(&philo->data->death);
 		if (get_time() - start >= time_in_ms)
 			break ;
-		usleep(100);
+		usleep(50);
 	}
 }
 
@@ -91,3 +91,4 @@ void	cleanup(t_data *data)
 	free(data->forks);
 	free(data->philos);
 }
+
