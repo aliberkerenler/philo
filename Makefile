@@ -1,7 +1,7 @@
 NAME = philo
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror -pthread
-SRCS = check.c init.c main.c utils.c routine.c routine_utils.c
+SRCS = init.c main.c utils.c routine.c routine_utils.c
 OBJS = $(SRCS:.c=.o)
 
 all: $(NAME)
@@ -19,5 +19,6 @@ fclean: clean
 	rm -f $(NAME)
 
 re: fclean all
+
 
 .PHONY: all clean fclean re 
