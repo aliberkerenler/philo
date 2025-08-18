@@ -14,7 +14,6 @@
 
 void	eat_sleep_routine(t_philo *philo)
 {
-	// Check if dead before taking any forks
 	pthread_mutex_lock(&philo->data->death);
 	if (philo->data->is_dead)
 	{
@@ -26,7 +25,7 @@ void	eat_sleep_routine(t_philo *philo)
 	pthread_mutex_lock(&philo->data->forks[philo->left_fork]);
 	print_status(philo, "has taken a fork");
 	
-	// Re-check if dead after taking first fork
+	
 	pthread_mutex_lock(&philo->data->death);
 	if (philo->data->is_dead)
 	{
@@ -49,7 +48,6 @@ void	eat_sleep_routine(t_philo *philo)
 	pthread_mutex_unlock(&philo->data->forks[philo->right_fork]);
 	pthread_mutex_unlock(&philo->data->forks[philo->left_fork]);
 	
-	// Check if philosopher has reached must_eat before sleeping
 	if (philo->data->must_eat > 0)
 	{
 		pthread_mutex_lock(&philo->meal_time_lock);
