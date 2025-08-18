@@ -59,9 +59,6 @@ void		ft_usleep(long long time_in_ms, t_philo *philo);
 void		print_status(t_philo *philo, char *status);
 void		cleanup(t_data *data);
 
-int			check_death(t_philo *philo);
-int			check_meals(t_data *data);
-
 int			init_data(t_data *data);
 int			init_mutexes(t_data *data);
 int			init_philosophers(t_data *data);

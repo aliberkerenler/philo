@@ -91,4 +91,3 @@ void	cleanup(t_data *data)
 	free(data->forks);
 	free(data->philos);
 }
-
