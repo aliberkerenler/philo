@@ -22,6 +22,13 @@ long long	get_time(void)
 
 void	print_status(t_philo *philo, char *status)
 {
+	pthread_mutex_lock(&philo->data->death);
+	if (philo->data->is_dead && status[0] != 'd')
+	{
+		pthread_mutex_unlock(&philo->data->death);
+		return ;
+	}
+	pthread_mutex_unlock(&philo->data->death);
 	pthread_mutex_lock(&philo->data->print);
 	if (!philo->data->is_dead || (status[0] == 'd'))
 		printf("%lld %d %s\n", get_time() - philo->data->start_time,

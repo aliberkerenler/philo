@@ -65,13 +65,15 @@ static void	monitor_loop(t_data *d, int *full_count, int *someone_died,
 		now = get_time();
 		if (!d->is_dead && (now - d->philos[i].last_meal >= d->time_to_die))
 		{
-			pthread_mutex_lock(&d->print);
+			pthread_mutex_lock(&d->death);
 			if (!d->is_dead)
 			{
-				printf("%lld %d died\n", now - d->start_time, d->philos[i].id);
 				d->is_dead = 1;
+				pthread_mutex_lock(&d->print);
+				printf("%lld %d died\n", now - d->start_time, d->philos[i].id);
+				pthread_mutex_unlock(&d->print);
 			}
-			pthread_mutex_unlock(&d->print);
+			pthread_mutex_unlock(&d->death);
 			pthread_mutex_unlock(&d->philos[i].meal_time_lock);
 			*someone_died = 1;
 			return ;

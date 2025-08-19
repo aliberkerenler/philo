@@ -14,10 +14,34 @@
 
 void	eat_sleep_routine(t_philo *philo)
 {
+	pthread_mutex_lock(&philo->data->death);
+	if (philo->data->is_dead)
+	{
+		pthread_mutex_unlock(&philo->data->death);
+		return ;
+	}
+	pthread_mutex_unlock(&philo->data->death);
 	pthread_mutex_lock(&philo->data->forks[philo->left_fork]);
 	print_status(philo, "has taken a fork");
+	pthread_mutex_lock(&philo->data->death);
+	if (philo->data->is_dead)
+	{
+		pthread_mutex_unlock(&philo->data->forks[philo->left_fork]);
+		pthread_mutex_unlock(&philo->data->death);
+		return ;
+	}
+	pthread_mutex_unlock(&philo->data->death);
 	pthread_mutex_lock(&philo->data->forks[philo->right_fork]);
 	print_status(philo, "has taken a fork");
+	pthread_mutex_lock(&philo->data->death);
+	if (philo->data->is_dead)
+	{
+		pthread_mutex_unlock(&philo->data->forks[philo->right_fork]);
+		pthread_mutex_unlock(&philo->data->forks[philo->left_fork]);
+		pthread_mutex_unlock(&philo->data->death);
+		return ;
+	}
+	pthread_mutex_unlock(&philo->data->death);
 	pthread_mutex_lock(&philo->meal_time_lock);
 	philo->last_meal = get_time();
 	pthread_mutex_unlock(&philo->meal_time_lock);
@@ -28,6 +52,13 @@ void	eat_sleep_routine(t_philo *philo)
 	pthread_mutex_unlock(&philo->meal_time_lock);
 	pthread_mutex_unlock(&philo->data->forks[philo->right_fork]);
 	pthread_mutex_unlock(&philo->data->forks[philo->left_fork]);
+	pthread_mutex_lock(&philo->data->death);
+	if (philo->data->is_dead)
+	{
+		pthread_mutex_unlock(&philo->data->death);
+		return ;
+	}
+	pthread_mutex_unlock(&philo->data->death);
 	print_status(philo, "is sleeping");
 	ft_usleep(philo->data->time_to_sleep, philo);
 }
@@ -36,6 +67,13 @@ void	think_routine(t_philo *philo, int silent)
 {
 	long long	delta;
 
+	pthread_mutex_lock(&philo->data->death);
+	if (philo->data->is_dead)
+	{
+		pthread_mutex_unlock(&philo->data->death);
+		return ;
+	}
+	pthread_mutex_unlock(&philo->data->death);
 	pthread_mutex_lock(&philo->meal_time_lock);
 	delta = (philo->data->time_to_die
 			- (get_time() - philo->last_meal)

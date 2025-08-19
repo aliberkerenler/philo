@@ -1,0 +1,8 @@
+# Build artifacts
+*.o
+philo
+
+# System files
+.DS_Store
+*.swp
+*.tmp
